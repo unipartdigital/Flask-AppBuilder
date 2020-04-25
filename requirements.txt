@@ -10,6 +10,8 @@ babel==2.6.0              # via flask-babel
 click==7.0
 colorama==0.4.1
 defusedxml==0.5.0         # via python3-openid
+dnspython==1.16.0         # via email-validator
+email-validator==1.0.5
 flask-babel==1.0.0
 flask-jwt-extended==3.18.0
 flask-login==0.4.1
@@ -17,6 +19,7 @@ flask-openid==1.2.5
 flask-sqlalchemy==2.4.0
 flask-wtf==0.14.2
 flask==1.1.1
+idna==2.9                 # via email-validator
 itsdangerous==1.1.0       # via flask
 jinja2==2.10.1            # via flask, flask-babel
 jsonschema==3.0.1
