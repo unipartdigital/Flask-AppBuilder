@@ -246,14 +246,14 @@ class BaseSecurityManager(AbstractSecurityManager):
         if self.auth_type == AUTH_OID:
             self.oid = OpenID(app)
         if self.auth_type == AUTH_OAUTH:
-            from flask_oauthlib.client import OAuth
+            from authlib.integrations.flask_client import OAuth
 
-            self.oauth = OAuth()
+            self.oauth = OAuth(app)
             self.oauth_remotes = dict()
             for _provider in self.oauth_providers:
                 provider_name = _provider["name"]
                 log.debug("OAuth providers init {0}".format(provider_name))
-                obj_provider = self.oauth.remote_app(
+                obj_provider = self.oauth.register(
                     provider_name, **_provider["remote_app"]
                 )
                 obj_provider._tokengetter = self.oauth_tokengetter
@@ -529,12 +529,13 @@ class BaseSecurityManager(AbstractSecurityManager):
         # for Google
         if provider == "google":
             me = self.appbuilder.sm.oauth_remotes[provider].get("userinfo")
-            log.debug("User info from Google: {0}".format(me.data))
+            data = me.json()
+            log.debug("User info from Google: {0}".format(data))
             return {
-                "username": "google_" + me.data.get("id", ""),
-                "first_name": me.data.get("given_name", ""),
-                "last_name": me.data.get("family_name", ""),
-                "email": me.data.get("email", ""),
+                "username": "google_" + data.get("id", ""),
+                "first_name": data.get("given_name", ""),
+                "last_name": data.get("family_name", ""),
+                "email": data.get("email", ""),
             }
         # for Azure AD Tenant. Azure OAuth response contains
         # JWT token which has user info.
